@@ -9,6 +9,7 @@ public class PlayerBehavior : MonoBehaviour
     public float hp;
     public float upAmount;
     public float maxWeight;
+    public  float multiplier;
 
     public GameObject gameOver;
     public Slider weight;
@@ -20,7 +21,7 @@ public class PlayerBehavior : MonoBehaviour
     void Start()
     {
         weight.maxValue = maxWeight;
-        weight.minValue = 1.0f;
+        weight.minValue = 2.0f;
         weight.value = GetComponent<Rigidbody2D>().mass;
         jumping = false;
     }
@@ -58,19 +59,23 @@ public class PlayerBehavior : MonoBehaviour
             }
             weight.value = GetComponent<Rigidbody2D>().mass;
         }
-
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && !jumping)
-        {
-            jumping = true;
-            GetComponent<Animator>().SetTrigger("jump");
-            GetComponent<Rigidbody2D>().AddForceY(upAmount, ForceMode2D.Impulse);
-        }
+        
 
         if (Keyboard.current.shiftKey.isPressed && jumping)
         {
             GetComponent<Rigidbody2D>().gravityScale += 1.0f;
         }
     }
+    
+    void FixedUpdate(){
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && !jumping)
+        {
+            jumping = true;
+            GetComponent<Animator>().SetTrigger("jump");
+            GetComponent<Rigidbody2D>().AddForceY(upAmount* multiplier * Time.fixedDeltaTime, ForceMode2D.Impulse);
+        }
+    }
+
 
     public void OnCollisionEnter2D(Collision2D other)
     {
@@ -89,7 +94,7 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-    public void OnCollusionExit2D(Collision2D other)
+    public void OnCollisionExit2D(Collision2D other)
     {
         if (other.collider.tag == "Border")
         {
