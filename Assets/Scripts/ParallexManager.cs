@@ -18,6 +18,6 @@ public class ParallexManager : MonoBehaviour
     void Update()
     {
         currentOffset += speed * Time.deltaTime;
-    bg.mainTextureOffset = new Vector2(currentOffset, 0.0f);
+        bg.mainTextureOffset = new Vector2(currentOffset, 0.0f);
     }
 }
